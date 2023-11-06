@@ -4,55 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Homework 10</title>
+    <!-- <link rel="stylesheet" href="https://unpkg.com/slim-select@latest/dist/slimselect.css" /> -->
     <link rel="stylesheet" href="css/common.css">
   </head>
   <body>
-    <select class="breed-select"></select>
-    <p class="loader">Loading data, please wait...</p>
-    <p class="error">Oops! Something went wrong! Try reloading the page!</p>
+    <select class="breed-select" id="selectElement"></select>
+    <p class="loader is-hidden">Loading data, please wait...</p>
+    <p class="error is-hidden">Oops! Something went wrong! Try reloading the page!</p>
     <div class="cat-info"></div>
-
+    
     <script src="index.js" type="module"></script>
   </body>
 </html>
-<!-- <div class="loader">
-  <div class="loader__circle"></div>
-  <div class="loader__circle"></div>
-  <div class="loader__circle"></div>
-</div>
-<style>
-  .loader {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
 
-  .loader__circle {
-    width: 1rem;
-    height: 1rem;
-    margin: 0 0.5rem;
-    background: #333;
-    border-radius: 50%;
-    animation: loader 0.6s linear infinite;
-  }
 
-  .loader__circle:nth-child(2) {
-    animation-delay: 0.2s;
-  }
-
-  .loader__circle:nth-child(3) {
-    animation-delay: 0.4s;
-  }
-
-  @keyframes loader {
-    0% {
-      transform: scale(0);
-    }
-    50% {
-      transform: scale(1);
-    }
-    100% {
-      transform: scale(0);
-    }
-  }
-</style> -->
