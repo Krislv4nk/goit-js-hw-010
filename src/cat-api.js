@@ -4,21 +4,52 @@ axios.defaults.headers.common["x-api-key"] = "live_70dUkozJaKRJH6v6FEFfisLMREnwD
 
 
 export function fetchBreeds() {
-  return axios.get("https://api.thecatapi.com/v1/breeds")
-    .then(response => response.data)
+  const url = 'https://api.thecatapi.com/v1/breeds';
+
+  return fetch(url)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      return data.map(breed => ({
+        id: breed.id,
+        name: breed.name
+      }));
+    })
     .catch(error => {
-      console.error("Error fetching breeds: ", error);
-      return [];
+      console.error('There was an error with the fetch operation: ', error);
     });
 }
 
 
 export function fetchCatByBreed(breedId) {
-  return axios.get(`https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}`)
-    .then(response => response.data)
+  const url = `https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}`;
+
+  return fetch(url)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data.length > 0) {
+        const cat = data[0];
+        return {
+          name: cat.breeds[0].name,
+          description: cat.breeds[0].description,
+          temperament: cat.breeds[0].temperament,
+          imageUrl: cat.url
+        };
+      } else {
+        throw new Error('No cat found with the provided breed ID');
+      }
+    })
     .catch(error => {
-      console.error("Error fetching cat information: ", error);
-      return null;
+      console.error('There was an error with the fetch operation: ', error);
     });
 }
 

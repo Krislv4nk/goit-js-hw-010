@@ -34,7 +34,7 @@ function fetchData(url) {
       });
       
       new SlimSelect({
-        select: '#selectElement'
+        select: '.breed-select'
       });
 
       toggleElements(false);
@@ -53,5 +53,4 @@ fetchData(breedApiUrl);
 const breed_id = 'your_breed_id_value_here';
 
 const catInfoApiUrl = `https://api.thecatapi.com/v1/images/search?breed_ids=${breed_id}`;
-fetchData(catInfoApiUrl);
 
