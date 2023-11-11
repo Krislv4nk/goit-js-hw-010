@@ -1,56 +1,7 @@
 
 
-// import { fetchBreeds, fetchCatByBreed } from './cat-api.js';
-
-// let breeds = [];
-// let selectedBreed = null;
-// let catInfo = null;
-
-// fetchBreeds()
-//   .then(data => {
-//     breeds = data;
-   
-//     updateBreedSelectOptions();
-//   })
-//   .catch(error => {
-//     console.error(`Error fetching breeds: ${error.message}`);
-//   });
-
-// function updateBreedSelectOptions() {
-//   const select = document.querySelector('.breed-select');
-//   breeds.forEach(breed => {
-//     const option = document.createElement('option');
-//     option.value = breed.id;
-//     option.text = breed.name;
-//     select.appendChild(option);
-//   });
-//   select.addEventListener('change', handleBreedChange);
-// }
-
-// function handleBreedChange(e) {
-//   selectedBreed = e.target.value;
-//   fetchCatByBreed(selectedBreed)
-//     .then(data => {
-//       catInfo = data[0];
-      
-//       updateCatInfoDiv();
-//     })
-//     .catch(error => {
-//       console.error(`Error fetching cat info: ${error.message}`);
-//     });
-// }
-
-// function updateCatInfoDiv() {
-//   const div = document.querySelector('.cat-info');
-//   div.innerHTML = `
-//     <img src="${catInfo.url}" alt="${catInfo.breeds[0].name}" />
-//     <h2>${catInfo.breeds[0].name}</h2>
-//     <p>${catInfo.breeds[0].description}</p>
-//     <p><strong>Temperament:</strong> ${catInfo.breeds[0].temperament}</p>
-//   `;
-// }
-
-
+import Notiflix from 'notiflix';
+import SlimSelect from 'slim-select';
 import { fetchBreeds, fetchCatByBreed } from './cat-api.js';
 
 let breeds = [];
@@ -74,17 +25,22 @@ fetchBreeds()
     loader.style.display = 'none'; 
   })
   .catch(error => {
-    console.error(`Error fetching breeds: ${error.message}`);
+    Notiflix.Notify.failure(`Error fetching breeds: ${error.message}`);
   });
 
 function updateBreedSelectOptions() {
   breedSelect.style.display = 'block'; 
-  breeds.forEach(breed => {
+  breeds.map(breed => {
     const option = document.createElement('option');
     option.value = breed.id;
     option.text = breed.name;
     breedSelect.appendChild(option);
   });
+
+  
+  new SlimSelect({
+    select: '#selected',
+  })
   breedSelect.addEventListener('change', handleBreedChange);
 }
 
@@ -99,7 +55,7 @@ function handleBreedChange(e) {
       updateCatInfoDiv();
     })
     .catch(error => {
-      console.error(`Error fetching cat info: ${error.message}`);
+      Notiflix.Notify.failure(`Error fetching cat info: ${error.message}`);
     })
     .finally(() => {
       loader.style.display = 'none'; 
