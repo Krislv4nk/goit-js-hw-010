@@ -64,7 +64,7 @@ function handleBreedChange(e) {
 
 function updateCatInfoDiv() {
   catInfoDiv.innerHTML = `
-    <img src="${catInfo.url}" alt="${catInfo.breeds[0].name}" />
+    <img src="${catInfo.url}" alt="${catInfo.breeds[0].name}" style="width: 100%; height: 100%; object-fit: cover;" />
     <h2>${catInfo.breeds[0].name}</h2>
     <p>${catInfo.breeds[0].description}</p>
     <p><strong>Temperament:</strong> ${catInfo.breeds[0].temperament}</p>
