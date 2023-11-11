@@ -1,56 +1,117 @@
 
 
-import Notiflix from "notiflix";
+// import { fetchBreeds, fetchCatByBreed } from './cat-api.js';
+
+// let breeds = [];
+// let selectedBreed = null;
+// let catInfo = null;
+
+// fetchBreeds()
+//   .then(data => {
+//     breeds = data;
+   
+//     updateBreedSelectOptions();
+//   })
+//   .catch(error => {
+//     console.error(`Error fetching breeds: ${error.message}`);
+//   });
+
+// function updateBreedSelectOptions() {
+//   const select = document.querySelector('.breed-select');
+//   breeds.forEach(breed => {
+//     const option = document.createElement('option');
+//     option.value = breed.id;
+//     option.text = breed.name;
+//     select.appendChild(option);
+//   });
+//   select.addEventListener('change', handleBreedChange);
+// }
+
+// function handleBreedChange(e) {
+//   selectedBreed = e.target.value;
+//   fetchCatByBreed(selectedBreed)
+//     .then(data => {
+//       catInfo = data[0];
+      
+//       updateCatInfoDiv();
+//     })
+//     .catch(error => {
+//       console.error(`Error fetching cat info: ${error.message}`);
+//     });
+// }
+
+// function updateCatInfoDiv() {
+//   const div = document.querySelector('.cat-info');
+//   div.innerHTML = `
+//     <img src="${catInfo.url}" alt="${catInfo.breeds[0].name}" />
+//     <h2>${catInfo.breeds[0].name}</h2>
+//     <p>${catInfo.breeds[0].description}</p>
+//     <p><strong>Temperament:</strong> ${catInfo.breeds[0].temperament}</p>
+//   `;
+// }
+
+
 import { fetchBreeds, fetchCatByBreed } from './cat-api.js';
 
-import SlimSelect from 'slim-select';
+let breeds = [];
+let selectedBreed = null;
+let catInfo = null;
 
 const breedSelect = document.querySelector('.breed-select');
+const catInfoDiv = document.querySelector('.cat-info');
 const loader = document.querySelector('.loader');
-const error = document.querySelector('.error');
-const catInfo = document.querySelector('.cat-info')
-
-function toggleElements(loading) {
-  breedSelect.style.display = loading ? 'none' : 'block';
-  loader.style.display = loading ? 'block' : 'none';
-  error.style.display = 'none';
+function showLoader() {
+  loader.classList.add('show-loader');
 }
 
-function fetchData(url) {
-  toggleElements(true);
-  fetch(url)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      data.map(({id, name}) =>{ 
-        const option = document.createElement('option');
-        option.value = id;
-        option.text = name;
-        breedSelect.appendChild(option);
-      });
-      
-      new SlimSelect({
-        select: '.breed-select'
-      });
+function hideLoader() {
+  loader.classList.remove('show-loader');
+}
+fetchBreeds()
+  .then(data => {
+    breeds = data;
+    updateBreedSelectOptions();
+    loader.style.display = 'none'; 
+  })
+  .catch(error => {
+    console.error(`Error fetching breeds: ${error.message}`);
+  });
 
-      toggleElements(false);
+function updateBreedSelectOptions() {
+  breedSelect.style.display = 'block'; 
+  breeds.forEach(breed => {
+    const option = document.createElement('option');
+    option.value = breed.id;
+    option.text = breed.name;
+    breedSelect.appendChild(option);
+  });
+  breedSelect.addEventListener('change', handleBreedChange);
+}
+
+function handleBreedChange(e) {
+  selectedBreed = e.target.value;
+  loader.style.display = 'block'; 
+  catInfoDiv.style.display = 'none';
+
+  fetchCatByBreed(selectedBreed)
+    .then(data => {
+      catInfo = data[0];
+      updateCatInfoDiv();
     })
-    .catch(err => {
-      console.error('Error:', err);
-      error.textContent = err.message;
-      error.style.display = 'block';
-      toggleElements(false);
+    .catch(error => {
+      console.error(`Error fetching cat info: ${error.message}`);
+    })
+    .finally(() => {
+      loader.style.display = 'none'; 
     });
 }
 
-const breedApiUrl = 'https://api.thecatapi.com/v1/breeds';
-fetchData(breedApiUrl);
-
-const breed_id = 'your_breed_id_value_here';
-
-const catInfoApiUrl = `https://api.thecatapi.com/v1/images/search?breed_ids=${breed_id}`;
-
+function updateCatInfoDiv() {
+  catInfoDiv.innerHTML = `
+    <img src="${catInfo.url}" alt="${catInfo.breeds[0].name}" />
+    <h2>${catInfo.breeds[0].name}</h2>
+    <p>${catInfo.breeds[0].description}</p>
+    <p><strong>Temperament:</strong> ${catInfo.breeds[0].temperament}</p>
+  `;
+  catInfoDiv.style.display = 'block'; 
+}
